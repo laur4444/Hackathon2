@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
                 }
+                loadingDialog.cancel();
             }
         });
 
