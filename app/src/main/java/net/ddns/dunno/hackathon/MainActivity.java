@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView buttonSignin;
     private ProgressDialog loadingDialog;
     private TextView referralEmailText;
+    private String referralEmail;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mRootRef;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void registerUser() {
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
-        String referralEmail = referralEmailText.getText().toString().trim();
+        referralEmail = referralEmailText.getText().toString().trim();
 
 
         if(TextUtils.isEmpty(email)) {
@@ -83,26 +86,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
+        /*
+        if(!TextUtils.isEmpty(referralEmail)){
+            if (firebaseAuth.fetchProvidersForEmail(email) == null) {
+                // this email hasn't signed up yet
+            } else {
+                // has signed up
+            }
+        }
+        */
 
         loadingDialog.setMessage("Registering User...");
         loadingDialog.show();
+
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                    mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
+                    mChildRef.setValue(referralEmail);
+                    loadingDialog.cancel();
                 } else {
                     Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
+                    loadingDialog.cancel();
+
                 }
 
             }
         });
-        if(firebaseAuth.getCurrentUser() != null) {
-            mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
-            mChildRef.setValue(referralEmail);
-        }
-        loadingDialog.cancel();
     }
 
     public void onClick(View view){
