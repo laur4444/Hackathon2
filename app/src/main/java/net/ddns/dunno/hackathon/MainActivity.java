@@ -118,8 +118,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+    }
 
-
+    private void profileChange(){
+        finish();
+        startActivity(new Intent(this, ProfileActivity.class));
     }
 
     private void adduser(String email, String password) {
@@ -135,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
                             mChildRef.setValue(referralEmail);
                             loadingDialog.cancel();
+                            finish();
+                            profileChange();
                         } else {
                             Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
                             loadingDialog.cancel();
