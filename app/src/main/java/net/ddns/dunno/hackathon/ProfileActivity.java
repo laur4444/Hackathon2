@@ -28,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView viewCard;
     private Button insertCard;
+    private Button goToPay;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mConditionRef;
@@ -53,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewPhone = findViewById(R.id.user_referred);
         viewCard = findViewById(R.id.user_card);
         insertCard = findViewById(R.id.user_AddCard);
+        goToPay = findViewById(R.id.user_Pay);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         viewUserEmail.setText("Welcome " + user.getEmail().toString());
@@ -62,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         buttonLogout.setOnClickListener(this);
         insertCard.setOnClickListener(this);
+        goToPay.setOnClickListener(this);
 
 
 
@@ -119,6 +122,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if(view == insertCard) {
             mInsertCard.setValue("12345678");
             insertCard.setVisibility(View.INVISIBLE);
+        }
+
+        if(view == goToPay) {
+            finish();
+            startActivity(new Intent(this, Pay.class));
         }
 
     }
