@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,8 +26,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView viewPhone;
 
+    private TextView viewCard;
+    private Button insertCard;
+
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mConditionRef;
+    DatabaseReference mInsertCard;
 
 
 
@@ -45,13 +50,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewUserEmail = findViewById(R.id.user_name);
         buttonLogout = findViewById(R.id.user_LogOut);
 
-        viewPhone = findViewById(R.id.user_Phone);
+        viewPhone = findViewById(R.id.user_referred);
+        viewCard = findViewById(R.id.user_card);
+        insertCard = findViewById(R.id.user_AddCard);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        viewUserEmail.setText("Welcome " + user.getUid().toString());
+        viewUserEmail.setText("Welcome " + user.getEmail().toString());
 
         mConditionRef = mRootRef.child("UIDS").child(user.getUid().toString()).child("Referral");
+        mInsertCard = mRootRef.child("UIDS").child(user.getUid().toString()).child("Card");
+
         buttonLogout.setOnClickListener(this);
+        insertCard.setOnClickListener(this);
 
 
 
@@ -64,7 +74,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String text = dataSnapshot.getValue(String.class);
-                viewPhone.setText(text);
+                if(TextUtils.isEmpty(text)){
+                    viewPhone.setText("Referral: Nu ai folosit un email valid!");
+                } else {
+                    viewPhone.setText("Referral: " + text);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mInsertCard.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                if(TextUtils.isEmpty(text)){
+                    //nothing
+                } else {
+                    insertCard.setVisibility(View.INVISIBLE);
+                    viewCard.setText("Card: " + text);
+
+                }
             }
 
             @Override
@@ -81,6 +114,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             firebaseAuth.signOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        }
+
+        if(view == insertCard) {
+            mInsertCard.setValue("12345678");
+            insertCard.setVisibility(View.INVISIBLE);
         }
 
     }

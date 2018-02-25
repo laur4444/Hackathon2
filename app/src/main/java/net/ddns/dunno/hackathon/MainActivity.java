@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        loadingDialog.setMessage("Registering User...");
+        loadingDialog.show();
         if(!TextUtils.isEmpty(referralEmail) && isValidEmaillId(referralEmail) == true){
             firebaseAuth.fetchProvidersForEmail(referralEmail).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                 @Override
@@ -126,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
                             mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
                             mChildRef.setValue(referralEmail);
-                            //loadingDialog.cancel();
+                            loadingDialog.cancel();
                         } else {
                             Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
-                            //loadingDialog.cancel();
+                            loadingDialog.cancel();
 
                         }
 
