@@ -2,6 +2,7 @@ package net.ddns.dunno.hackathon;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -27,8 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText passwordText;
     private TextView buttonSignin;
     private ProgressDialog loadingDialog;
+    private TextView referralEmailText;
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference mRootRef;
+    private DatabaseReference mChildRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        mRootRef = FirebaseDatabase.getInstance().getReference();
+
 
         if(firebaseAuth.getCurrentUser() != null){
             // start profile activity
@@ -48,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         emailText = findViewById(R.id.user_Email);
         passwordText = findViewById(R.id.user_Password);
+        referralEmailText = findViewById(R.id.referral_Email);
 
         loadingDialog = new ProgressDialog(this);
 
@@ -61,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void registerUser() {
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
+        String referralEmail = referralEmailText.getText().toString().trim();
+
 
         if(TextUtils.isEmpty(email)) {
             //email is empty
@@ -75,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         loadingDialog.setMessage("Registering User...");
         loadingDialog.show();
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -85,11 +95,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
                 }
-                loadingDialog.cancel();
+
             }
         });
-
-
+        if(firebaseAuth.getCurrentUser() != null) {
+            mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
+            mChildRef.setValue(referralEmail);
+        }
+        loadingDialog.cancel();
     }
 
     public void onClick(View view){
