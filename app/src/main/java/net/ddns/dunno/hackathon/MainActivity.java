@@ -22,6 +22,9 @@ import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog loadingDialog;
     private TextView referralEmailText;
     private String referralEmail;
+    private String email;
+    private String password;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mRootRef;
@@ -72,10 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void registerUser() {
-        String email = emailText.getText().toString().trim();
-        String password = passwordText.getText().toString().trim();
+        email = emailText.getText().toString().trim();
+        password = passwordText.getText().toString().trim();
         referralEmail = referralEmailText.getText().toString().trim();
-
 
         if(TextUtils.isEmpty(email)) {
             //email is empty
@@ -88,40 +92,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(!TextUtils.isEmpty(referralEmail)){
+        if(!TextUtils.isEmpty(referralEmail) && isValidEmaillId(referralEmail) == true){
             firebaseAuth.fetchProvidersForEmail(referralEmail).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                 @Override
                 public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                    if (task.getResult().getProviders().size() == 0) {
+                    if (task.getResult().getProviders().size() > 0) {
+                        Toast.makeText(MainActivity.this, "Referral exists!", Toast.LENGTH_SHORT).show();
+                        adduser(email, password);
+                    } else {
                         Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
-                        return;
+                        //adduser(email, password);
                     }
                 }
             });
-
+        } else {
+            referralEmail = "";
+            adduser(email, password);
         }
 
 
-        loadingDialog.setMessage("Registering User...");
-        loadingDialog.show();
+
+    }
+
+    private void adduser(String email, String password) {
+        //loadingDialog.setMessage("Registering User...");
+        //loadingDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                    mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
-                    mChildRef.setValue(referralEmail);
-                    loadingDialog.cancel();
-                } else {
-                    Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
-                    loadingDialog.cancel();
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                            mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
+                            mChildRef.setValue(referralEmail);
+                            //loadingDialog.cancel();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
+                            //loadingDialog.cancel();
 
-                }
+                        }
 
-            }
-        });
+                    }
+                });
+    }
+
+    private boolean isValidEmaillId(String email){
+
+        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
     public void onClick(View view){
