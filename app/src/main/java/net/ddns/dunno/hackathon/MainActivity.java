@@ -107,8 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         } else {
-            referralEmail = "";
-            adduser(email, password);
+            if (!TextUtils.isEmpty(referralEmail)){
+                Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
+            } else {
+                adduser(email, password);
+            }
         }
 
 
