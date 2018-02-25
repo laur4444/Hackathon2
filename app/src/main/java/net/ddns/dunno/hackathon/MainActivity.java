@@ -100,17 +100,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (task.getResult().getProviders().size() > 0) {
                         Toast.makeText(MainActivity.this, "Referral exists!", Toast.LENGTH_SHORT).show();
                         adduser(email, password);
+                        loadingDialog.cancel();
                     } else {
                         Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
                         //adduser(email, password);
+                        loadingDialog.cancel();
                     }
                 }
             });
         } else {
             if (!TextUtils.isEmpty(referralEmail)){
                 Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
+                loadingDialog.cancel();
             } else {
                 adduser(email, password);
+                loadingDialog.cancel();
             }
         }
 
