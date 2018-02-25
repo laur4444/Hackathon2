@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -86,15 +87,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
-        /*
+
         if(!TextUtils.isEmpty(referralEmail)){
-            if (firebaseAuth.fetchProvidersForEmail(email) == null) {
-                // this email hasn't signed up yet
-            } else {
-                // has signed up
-            }
+            firebaseAuth.fetchProvidersForEmail(referralEmail).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                @Override
+                public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                    if (task.getResult().getProviders().size() == 0) {
+                        Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            });
+
         }
-        */
+
 
         loadingDialog.setMessage("Registering User...");
         loadingDialog.show();
