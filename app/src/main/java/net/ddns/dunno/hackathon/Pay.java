@@ -1,5 +1,6 @@
 package net.ddns.dunno.hackathon;
 
+import android.content.Intent;
 import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,7 +52,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
             } else {
                 root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code).child("Stare");
                 user = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii");
-                validate();
+                //validate();
             }
         }
     }
@@ -60,14 +61,19 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String stare = dataSnapshot.getValue(String.class);
-                Toast.makeText(Pay.this, "Pending" + stare, Toast.LENGTH_SHORT).show();
                 if(stare.equals("Pending")){
-                    Toast.makeText(Pay.this, "PendingSuccessful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Pay.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                     root.setValue("Completed");
                     user.child(code).child("Progres").setValue("Am reusit");
-                } else {
+                    finish();
+                    startActivity(new Intent(Pay.this, ProfileActivity.class));
 
+                } else if(!stare.equals("Completed")) {
+                    Toast.makeText(Pay.this, "Cod invalid!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Pay.this, "Plata deja efectuata!", Toast.LENGTH_SHORT).show();
                 }
+                root.removeEventListener(this);
             }
 
             @Override
