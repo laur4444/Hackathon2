@@ -52,7 +52,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
             } else {
                 root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code).child("Stare");
                 user = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii");
-                //validate();
+                validate();
             }
         }
     }
