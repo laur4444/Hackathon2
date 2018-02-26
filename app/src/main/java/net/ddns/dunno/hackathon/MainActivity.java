@@ -100,19 +100,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (task.getResult().getProviders().size() > 0) {
                         Toast.makeText(MainActivity.this, "Referral exists!", Toast.LENGTH_SHORT).show();
                         adduser(email, password);
+                        loadingDialog.cancel();
                     } else {
                         Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
                         //adduser(email, password);
+                        loadingDialog.cancel();
                     }
                 }
             });
         } else {
-            referralEmail = "";
-            adduser(email, password);
+            if (!TextUtils.isEmpty(referralEmail)){
+                Toast.makeText(MainActivity.this, "Referral doesn't exist!", Toast.LENGTH_SHORT).show();
+                loadingDialog.cancel();
+            } else {
+                adduser(email, password);
+                loadingDialog.cancel();
+            }
         }
 
+    }
 
-
+    private void profileChange(){
+        finish();
+        startActivity(new Intent(this, ProfileActivity.class));
     }
 
     private void adduser(String email, String password) {
@@ -128,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
                             mChildRef.setValue(referralEmail);
                             loadingDialog.cancel();
+                            finish();
+                            profileChange();
                         } else {
                             Toast.makeText(MainActivity.this, "Could not register!", Toast.LENGTH_SHORT).show();
                             loadingDialog.cancel();
