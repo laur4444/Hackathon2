@@ -1,5 +1,6 @@
 package net.ddns.dunno.hackathon;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +28,14 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth firebaseAuth;
     private String code;
 
+    private ProgressDialog loadingDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
-
+        loadingDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
 
         codeText = findViewById(R.id.user_PumpCode);
@@ -52,6 +56,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
             } else {
                 root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code).child("Stare");
                 user = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii");
+                loadingDialog.show();
                 validate();
             }
         }
@@ -73,6 +78,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
                 } else {
                     Toast.makeText(Pay.this, "Plata deja efectuata!", Toast.LENGTH_SHORT).show();
                 }
+                loadingDialog.cancel();
                 root.removeEventListener(this);
             }
 
