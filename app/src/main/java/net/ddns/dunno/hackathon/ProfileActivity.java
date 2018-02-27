@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -136,17 +137,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if(view == goToTransactions) {
-           // finish();
-            //startActivity(new Intent(this, TransactionsActivity.class));
-            DatabaseReference transactions = FirebaseDatabase.getInstance().getReference().child("Test");
+            finish();
+            startActivity(new Intent(this, TransactionsActivity.class));
+
+            /*
+            DatabaseReference transactions = FirebaseDatabase.getInstance().getReference().child("Pumps").child("1000");
             net.ddns.dunno.hackathon.Transaction test = new net.ddns.dunno.hackathon.Transaction();
             test.setPrice("10");
             test.setTransactionID("1000");
-            try {
-                transactions.child("numeIrelevant").setValue(test);
-            } catch (DatabaseException e) {
-                e.printStackTrace();
-            }
+            test.setLitres("2");
+            test.setPricePerLitre("2.5");
+            test.setPumpID("1");
+            test.setStatus("Pending");
+            transactions.setValue(test);
+
+            DatabaseReference incercare = FirebaseDatabase.getInstance().getReference().child("Pumps");
+
+            Toast.makeText(Pay.this, "Plata deja efectuata!", Toast.LENGTH_SHORT).show();
+            */
 
         }
 

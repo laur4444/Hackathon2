@@ -54,7 +54,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
                 Toast.makeText(this, "Please enter a code!", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code).child("Stare");
+                root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code);
                 user = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii");
                 loadingDialog.show();
                 validate();
@@ -65,11 +65,12 @@ public class Pay extends AppCompatActivity implements View.OnClickListener{
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String stare = dataSnapshot.getValue(String.class);
-                if(stare.equals("Pending")){
+                Transaction stare = dataSnapshot.getValue(Transaction.class);
+                if(stare.getStatus().equals("Pending")){
                     Toast.makeText(Pay.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
-                    root.setValue("Completed");
-                    user.child(code).child("Progres").setValue("Am reusit");
+                    stare.setStatus("Completed");
+                    root.setValue(stare);
+                    user.child(stare.getTransactionID()).setValue(stare);
                     finish();
                     startActivity(new Intent(Pay.this, ProfileActivity.class));
 
