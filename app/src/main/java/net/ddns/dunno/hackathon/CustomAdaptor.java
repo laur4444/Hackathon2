@@ -50,7 +50,7 @@ public class CustomAdaptor extends BaseAdapter{
 
         final Transaction s = (Transaction) this.getItem(position);
 
-        textViewID.setText(s.getUID() + "            ");
+        textViewID.setText(s.getUID().substring(0, 5) + "         ");
         textViewPrice.setText(s.getPrice() + " lei");
 
         convertView.setOnClickListener(new View.OnClickListener() {
