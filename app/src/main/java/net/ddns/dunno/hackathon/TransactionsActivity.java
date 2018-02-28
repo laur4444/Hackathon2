@@ -60,23 +60,17 @@ public class TransactionsActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                net.ddns.dunno.hackathon.Transaction transaction = dataSnapshot.getValue(net.ddns.dunno.hackathon.Transaction.class);
-                transactions.add(transaction);
-                adaptor.notifyDataSetChanged();
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                net.ddns.dunno.hackathon.Transaction transaction = dataSnapshot.getValue(net.ddns.dunno.hackathon.Transaction.class);
-                transactions.add(transaction);
-                adaptor.notifyDataSetChanged();
+
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                net.ddns.dunno.hackathon.Transaction transaction = dataSnapshot.getValue(net.ddns.dunno.hackathon.Transaction.class);
-                transactions.add(transaction);
-                adaptor.notifyDataSetChanged();
+
             }
 
             @Override
