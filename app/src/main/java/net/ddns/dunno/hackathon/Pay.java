@@ -44,10 +44,13 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
     private DatabaseReference root;
     private DatabaseReference user;
     private FirebaseAuth firebaseAuth;
-    private String code;
     private String comandaCurenta;
+    private boolean handShake = true;
     private boolean stepTwo;
-    private boolean firstChange;
+    private boolean firstChange = true;
+    private int noOfChanges = 0;
+
+    private String code;
 
     SurfaceView cameraPreview;
     TextView textResult;
@@ -80,8 +83,6 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_pay);
         loadingDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
-
-        codeText = findViewById(R.id.user_PumpCode);
         buttonPay = findViewById(R.id.buttonPay);
 
         buttonPay.setOnClickListener(this);
@@ -91,7 +92,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(640, 480)
+                .setRequestedPreviewSize(750, 750)
                 .build();
 
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -133,9 +134,14 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                     textResult.post(new Runnable() {
                         @Override
                         public void run() {
-                            Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(1000);
-                            textResult.setText(qrcodes.valueAt(0).displayValue);
+
+                            code = qrcodes.valueAt(0).displayValue;
+                            textResult.setText(code);
+                            if(code.equals("Pump1") && handShake){
+                                handShake = false;
+                                firstChange = true;
+                                tryToPay();
+                            }
                         }
                     });
                 }
@@ -144,149 +150,42 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
 
     }
-
-    @Override
-    public void onClick(View view) {
-
-        if (view == buttonPay) {
-            code = codeText.getText().toString().trim();
-            if (TextUtils.isEmpty(code)) {
-                Toast.makeText(this, "Please enter a code!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                root = FirebaseDatabase.getInstance().getReference().child("Pumps").child("ComandaCurenta");
-                loadingDialog.setMessage("Working on it...");
-                loadingDialog.show();
-                root.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        comandaCurenta = dataSnapshot.getValue().toString();
-                        if(comandaCurenta.equals("Ready")) {
-                            Transaction noua = new Transaction();
-                            noua.setUID(firebaseAuth.getUid());
-                            user = FirebaseDatabase.getInstance().getReference().child("Pumps").child("Tranzactie");
-                            user.setValue(noua);
-                            root.setValue("Waiting");
-                            Toast.makeText(Pay.this, "Poti alimenta!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            root.removeEventListener(this);
-                            Toast.makeText(Pay.this, "Incearca din nou sau alimenteaza normal!", Toast.LENGTH_SHORT).show();
-                        }
-                        loadingDialog.cancel();
-                        /*
-
-
-                        user = FirebaseDatabase.getInstance().getReference().child("Pumps").child(comandaCurenta);
-                        stepTwo = false;
-                        user.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Transaction t = dataSnapshot.getValue(Transaction.class);
-                                if(!stepTwo) {
-                                    if (TextUtils.isEmpty(t.getUID())) {
-                                        t.setUID(firebaseAuth.getUid());
-                                        user.setValue(t);
-                                        stepTwo = true;
-                                        firstChange = false;
-                                        //user.removeEventListener(this);
-                                    } else {
-                                        if(!firstChange){
-                                            firstChange = true;
-                                            return;
-                                        }
-                                        Toast.makeText(Pay.this, "Comanda deja activata!", Toast.LENGTH_SHORT).show();
-                                        user.removeEventListener(this);
-                                        loadingDialog.cancel();
-                                    }
-                                } else {
-                                    if(t.getStatus().equals("Completed")) {
-                                        Toast.makeText(Pay.this, "Plata efectuata!", Toast.LENGTH_SHORT).show();
-                                        user.removeEventListener(this);
-                                        loadingDialog.cancel();
-                                    }
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                        */
-                        //root.removeEventListener(this);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                /*
-                if (!comandaCurenta.isEmpty()) {
-                    user = FirebaseDatabase.getInstance().getReference().child("Pumps").child(comandaCurenta);
-                    user.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Transaction t = dataSnapshot.getValue(Transaction.class);
-                            if (TextUtils.isEmpty(t.getUID())) {
-                                t.setUID(firebaseAuth.getUid());
-                                user.removeEventListener(this);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                    //loadingDialog.show();
-                    //validate();
-                }
-                */
-
-
-
-            /*
-            code = codeText.getText().toString().trim();
-            if (TextUtils.isEmpty(code)) {
-                Toast.makeText(this, "Please enter a code!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(code);
-                user = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii");
-                loadingDialog.show();
-                validate();
-            }
-            */
-            }
-        }
-    }
-    private void validate(){
+    private void tryToPay() {
+        root = FirebaseDatabase.getInstance().getReference().child(code).child("ComandaCurenta");
+        loadingDialog.setMessage("Working on it...");
+        loadingDialog.show();
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                /*
-                Transaction stare = dataSnapshot.getValue(Transaction.class);
-                if(stare.getStatus().equals("Pending")){
-                    Toast.makeText(Pay.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
-                    stare.setStatus("Completed");
-                    root.setValue(stare);
-                    user.child(stare.getTransactionID()).setValue(stare);
-                    finish();
-                    startActivity(new Intent(Pay.this, ProfileActivity.class));
 
-                } else if(!stare.equals("Completed")) {
-                    Toast.makeText(Pay.this, "Cod invalid!", Toast.LENGTH_SHORT).show();
+                comandaCurenta = dataSnapshot.getValue().toString();
+                if (comandaCurenta.equals("Ready")) {
+                    if(firstChange) {
+                        Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        vibrator.vibrate(1000);
+                        firstChange = false;
+                        Transaction noua = new Transaction();
+                        noua.setUID(firebaseAuth.getUid());
+                        user = FirebaseDatabase.getInstance().getReference().child(code).child("Transaction");
+                        user.setValue(noua);
+                        root.setValue("Waiting");
+                        Toast.makeText(Pay.this, "Poti alimenta!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        handShake = true;
+                        Toast.makeText(Pay.this, "Plata Efectuata!", Toast.LENGTH_SHORT).show();
+                        root.removeEventListener(this);
+                    }
                 } else {
-                    Toast.makeText(Pay.this, "Plata deja efectuata!", Toast.LENGTH_SHORT).show();
+                    if(firstChange) {
+                        root.removeEventListener(this);
+                        Toast.makeText(Pay.this, "Incearca din nou sau alimenteaza normal!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 loadingDialog.cancel();
-                */
 
-                root.removeEventListener(this);
+
+
+
             }
 
             @Override
@@ -296,4 +195,11 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+
+        if (view == buttonPay) {
+
+        }
+    }
 }
