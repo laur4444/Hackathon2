@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(firebaseAuth.getCurrentUser() != null){
             // start profile activity
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
         buttonRegister = findViewById(R.id.user_Register);
@@ -75,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonRegister.setOnClickListener(this);
         buttonSignin.setOnClickListener(this);
 
+    }
+
+    protected void onResume() {
+
+        super.onResume();
+        if(firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
     }
 
     private void registerUser() {
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void profileChange(){
         finish();
-        startActivity(new Intent(this, ProfileActivity.class));
+        startActivity(new Intent(this, CardCheckActivity.class));
     }
 
     private void adduser(String email, String password) {
@@ -166,11 +174,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view){
         if(view == buttonRegister) {
+            finish();
             registerUser();
         }
         if(view == buttonSignin) {
             // go to sign in activity
-            //finish();
+            finish();
             startActivity(new Intent(this, LoginActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
