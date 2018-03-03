@@ -78,8 +78,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         goToTransactions.setOnClickListener(this);
 
 
-
-
     }
     protected void onStart() {
         super.onStart();
