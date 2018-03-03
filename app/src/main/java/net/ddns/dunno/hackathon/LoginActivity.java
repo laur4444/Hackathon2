@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(firebaseAuth.getCurrentUser() != null) {
             //start profile activity
-            finish();
+            //finish();
             startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
@@ -135,6 +136,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // [END auth_with_google]
 
 
+
+    protected void onResume() {
+
+        super.onResume();
+        if(firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
+    }
+
     private void userLogin(){
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
@@ -160,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if(task.isSuccessful()){
                     //start profile activity
-                    finish();
+                    //finish();
                     change(CardCheckActivity.class);
                 }
             }
@@ -174,7 +184,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             userLogin();
         }
         if(view == registerTextView) {
-            finish();
+            //finish();
             startActivity(new Intent(this, MainActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
