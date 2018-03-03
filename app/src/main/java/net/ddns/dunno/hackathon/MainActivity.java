@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    protected void onResume() {
+
+        super.onResume();
+        if(firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
+    }
+
     private void registerUser() {
         email = emailText.getText().toString().trim();
         password = passwordText.getText().toString().trim();

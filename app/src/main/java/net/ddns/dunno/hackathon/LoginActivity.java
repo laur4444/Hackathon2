@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(firebaseAuth.getCurrentUser() != null) {
             //start profile activity
-            finish();
+            //finish();
             startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
@@ -60,6 +60,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
+    protected void onResume() {
+
+        super.onResume();
+        if(firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
+    }
+
     private void userLogin(){
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
@@ -85,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if(task.isSuccessful()){
                     //start profile activity
-                    finish();
+                    //finish();
                     change(CardCheckActivity.class);
                 }
             }
@@ -99,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             userLogin();
         }
         if(view == registerTextView) {
-            finish();
+            //finish();
             startActivity(new Intent(this, MainActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
