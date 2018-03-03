@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.craftman.cardform.Card;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,23 +28,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView viewUserEmail;
     private Button buttonLogout;
 
-    private TextView viewPhone;
+    //private TextView viewPhone;
 
     private TextView viewCard;
     private Button insertCard;
     private Button goToPay;
     private Button goToTransactions;
 
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef;
-    DatabaseReference mInsertCard;
-
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    //private DatabaseReference mConditionRef;
+    //private DatabaseReference mInsertCard;
+    private DatabaseReference myCardRef;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -56,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewUserEmail = findViewById(R.id.user_name);
         buttonLogout = findViewById(R.id.user_LogOut);
 
-        viewPhone = findViewById(R.id.user_referred);
+        //viewPhone = findViewById(R.id.user_referred);
         viewCard = findViewById(R.id.user_card);
         insertCard = findViewById(R.id.user_AddCard);
         goToPay = findViewById(R.id.user_Pay);
@@ -64,9 +66,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         viewUserEmail.setText("Welcome " + user.getEmail().toString());
+        viewCard.setText("Card: ");
 
-        mConditionRef = mRootRef.child("UIDS").child(user.getUid().toString()).child("Referral");
-        mInsertCard = mRootRef.child("UIDS").child(user.getUid().toString()).child("Card");
+        //mConditionRef = mRootRef.child("UIDS").child(user.getUid().toString()).child("Referral");
+        //mInsertCard = mRootRef.child("UIDS").child(user.getUid().toString()).child("Card");
+        myCardRef = mRootRef.child("UIDS").child(user.getUid().toString()).child("card").child("number");
 
         buttonLogout.setOnClickListener(this);
         insertCard.setOnClickListener(this);
@@ -74,12 +78,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         goToTransactions.setOnClickListener(this);
 
 
-
-
     }
     protected void onStart() {
         super.onStart();
-
+        /*
         mConditionRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,7 +98,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-
+        */
+        /*
         mInsertCard.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,7 +118,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+        */
+        myCardRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String card_nr = dataSnapshot.getValue(String.class);
+                String afisare;
+                afisare = "xxxx xxxx xxxx " + card_nr.substring(12);
+                viewCard.setText("Card: " + afisare);
+                //myCardRef.removeEventListener(this);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
     @Override

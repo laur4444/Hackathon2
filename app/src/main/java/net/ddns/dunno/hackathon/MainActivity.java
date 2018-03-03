@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         emailText = findViewById(R.id.user_Email);
         passwordText = findViewById(R.id.user_Password);
-        referralEmailText = findViewById(R.id.referral_Email);
+        //referralEmailText = findViewById(R.id.referral_Email);
 
         loadingDialog = new ProgressDialog(this);
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void registerUser() {
         email = emailText.getText().toString().trim();
         password = passwordText.getText().toString().trim();
-        referralEmail = referralEmailText.getText().toString().trim();
+        //referralEmail = referralEmailText.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)) {
             //email is empty
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         loadingDialog.setMessage("Registering User...");
         loadingDialog.show();
+        /*
         if(!TextUtils.isEmpty(referralEmail) && isValidEmaillId(referralEmail) == true){
             firebaseAuth.fetchProvidersForEmail(referralEmail).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                 @Override
@@ -118,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loadingDialog.cancel();
             }
         }
-
+        */
+        adduser(email, password);
+        loadingDialog.cancel();
     }
 
     private void profileChange(){
@@ -136,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
-                            mChildRef.setValue(referralEmail);
+                            //mChildRef = mRootRef.child("UIDS").child(firebaseAuth.getUid().toString()).child("Referral");
+                            //mChildRef.setValue(referralEmail);
                             loadingDialog.cancel();
                             finish();
                             profileChange();

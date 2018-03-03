@@ -170,8 +170,6 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         user.setValue(noua);
                         root.setValue("Waiting");
                         Toast.makeText(Pay.this, "Poti alimenta!", Toast.LENGTH_SHORT).show();
-                        change();
-
                     } else {
                         handShake = true;
                         Toast.makeText(Pay.this, "Plata Efectuata!", Toast.LENGTH_SHORT).show();
@@ -199,14 +197,11 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        //startActivity(new Intent(this, Pay.class));
+
         if (view == buttonPay) {
                 Transaction newTransaction = new Transaction();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii").child("Test");
                 ref.setValue(newTransaction);
         }
-    }
-    public void change(){
-        startActivity(new Intent(this, ProfileActivity.class));
     }
 }
