@@ -58,7 +58,7 @@ public class CustomAdaptor extends BaseAdapter{
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(c, s.getStatus1(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(c, s.getStatus1(), Toast.LENGTH_SHORT).show();
             }
         });
 
