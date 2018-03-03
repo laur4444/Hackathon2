@@ -88,11 +88,12 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
         buttonPay.setOnClickListener(this);
 
         cameraPreview = findViewById(R.id.cameraPreview);
+
         textResult = findViewById(R.id.textResult);
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(750, 750)
+                .setRequestedPreviewSize(1000, 1000)
                 .build();
 
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {

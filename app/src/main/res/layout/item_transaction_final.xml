@@ -4,26 +4,28 @@
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="15dp"
+    android:paddingBottom="10dp"
     android:paddingTop="15dp"
     android:background="#ffffff">
 
 
     <TextView
-        android:id="@+id/textViewPrice12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:textColor="#00a7f5"
-        android:text="32 lei" />
-
-    <TextView
         android:id="@+id/textViewDate12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:text="zz/ll/aaaa 24:00"
         android:textColor="#00a7f5"
-        android:text="zz/ll/aaaa 24:00" />
+        android:textSize="25dp"
+        android:paddingBottom="15dp" />
+
+    <TextView
+        android:id="@+id/textViewPrice12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="32 lei"
+        android:textColor="@color/colorBlack"
+        android:paddingBottom="10dp"
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/textViewStatus12"
@@ -31,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textViewPrice12"
         android:textSize="20dp"
-        android:textColor="#00a7f5"
+        android:textColor="@color/colorVerde"
         android:text="Completed"
         />
 </LinearLayout>
