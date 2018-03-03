@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void profileChange(){
         finish();
-        startActivity(new Intent(this, ProfileActivity.class));
+        startActivity(new Intent(this, CardCheckActivity.class));
     }
 
     private void adduser(String email, String password) {

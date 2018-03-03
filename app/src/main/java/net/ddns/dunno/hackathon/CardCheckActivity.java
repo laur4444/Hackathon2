@@ -32,9 +32,11 @@ public class CardCheckActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild("card")){
                     ref.removeEventListener(this);
+                    finish();
                     change(ProfileActivity.class);
                 } else {
                     ref.removeEventListener(this);
+                    finish();
                     change(CardFormActivity.class);
                 }
             }
