@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 public class CardCheckActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     DatabaseReference ref;
-    Card card;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,16 +25,17 @@ public class CardCheckActivity extends AppCompatActivity {
             change(LoginActivity.class);
         }
 
-        ref = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("card");
+        ref = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid());
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                card = dataSnapshot.getValue(Card.class);
-                if(card.getName().isEmpty()){
-                    change(CardFormActivity.class);
-                } else {
+                if(dataSnapshot.hasChild("card")){
+                    ref.removeEventListener(this);
                     change(ProfileActivity.class);
+                } else {
+                    ref.removeEventListener(this);
+                    change(CardFormActivity.class);
                 }
             }
 
