@@ -67,7 +67,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(firebaseAuth.getCurrentUser() != null) {
             //start profile activity
             //finish();
-            startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
+            firebaseAuth.signOut();
+            //startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
         loadingDialog = new ProgressDialog(this);

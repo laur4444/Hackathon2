@@ -144,6 +144,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                                 handShake = false;
                                 firstChange = true;
                                 tryToPay();
+                                code = "Pula";
                             }
                         }
                     });
