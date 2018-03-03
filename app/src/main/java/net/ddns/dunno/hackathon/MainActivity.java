@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference mRootRef;
     private DatabaseReference mChildRef;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,8 +167,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(view == buttonSignin) {
             // go to sign in activity
-            finish();
+            //finish();
             startActivity(new Intent(this, LoginActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 }
