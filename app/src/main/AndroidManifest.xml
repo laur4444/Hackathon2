@@ -30,7 +30,8 @@
             android:value="barcode" />
 
         <activity android:name=".CardFormActivity" />
-        <activity android:name=".CardCheckActivity"></activity>
+        <activity android:name=".CardCheckActivity" />
+        <activity android:name=".TestLogin"></activity>
     </application>
 
 </manifest>
