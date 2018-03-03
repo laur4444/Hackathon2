@@ -63,11 +63,13 @@ public class CardFormActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()){
                     return;
                 }
+                /*)
                 myCard = dataSnapshot.getValue(Card.class);
                 cardName.setHint(myCard.getName());
                 cardNumber.setHint(myCard.getNumber());
                 cvc.setHint(myCard.getCVC());
                 expiryDate.setHint(myCard.getExpMonth() + "/" + myCard.getExpYear());
+                */
             }
 
             @Override
