@@ -51,6 +51,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
     private int noOfChanges = 0;
 
     private String code;
+    private boolean ok;
 
     SurfaceView cameraPreview;
     TextView textResult;
@@ -121,7 +122,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                 cameraSource.stop();
             }
         });
-
+        ok = false;
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -137,9 +138,9 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         public void run() {
 
                             code = qrcodes.valueAt(0).displayValue;
-                            //if (isValidCode(code))
                             textResult.setText(code);
-                            if(code.equals("Pump1") && handShake){
+                            if(isValidCode(code) && handShake){
+                                ok = false;
                                 handShake = false;
                                 firstChange = true;
                                 tryToPay();
@@ -155,14 +156,16 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
     private boolean isValidCode(String code){
         String IDS, IDP;
-        IDS = code.substring(0, 3);
-        IDP = code.substring(5, 6);
+        //ok = false;
+        IDS = code.substring(0, 4);
+        IDP = code.substring(5, 7);
         root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(IDS).child(IDP);
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-
+                    ok = true;
+                    root.removeEventListener(this);
                 }
             }
 
@@ -171,12 +174,14 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        return true;
+        return ok;
     }
 
     private void tryToPay() {
         loadingDialog.setMessage("Working on it...");
         loadingDialog.show();
+        root = root.child("ComandaCurenta");
+        user = root;
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -189,9 +194,10 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         firstChange = false;
                         Transaction noua = new Transaction();
                         noua.setUID(firebaseAuth.getUid());
-                        user = FirebaseDatabase.getInstance().getReference().child(code).child("Transaction");
+                        user = user.getParent().child("Transactions");
                         user.setValue(noua);
-                        root.setValue("Waiting");
+                        user = user.getParent().child("ComandaCurenta");
+                        user.setValue("Waiting");
                         Toast.makeText(Pay.this, "Poti alimenta!", Toast.LENGTH_SHORT).show();
                     } else {
                         handShake = true;
