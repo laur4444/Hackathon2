@@ -33,5 +33,6 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.8.0'
     compile 'com.google.android.gms:play-services-vision:11.8.0'
     compile 'com.craftman.cardform:cardform:0.0.2'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
 }
 apply plugin: 'com.google.gms.google-services'

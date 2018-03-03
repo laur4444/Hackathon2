@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(firebaseAuth.getCurrentUser() != null){
             // start profile activity
-            finish();
-            startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
+            //finish();
+            firebaseAuth.signOut();
+            //startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
         buttonRegister = findViewById(R.id.user_Register);

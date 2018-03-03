@@ -144,6 +144,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                                 handShake = false;
                                 firstChange = true;
                                 tryToPay();
+                                code = "Pula";
                             }
                         }
                     });
@@ -208,6 +209,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                     if(firstChange) {
                         root.removeEventListener(this);
                         Toast.makeText(Pay.this, "Incearca din nou sau alimenteaza normal!", Toast.LENGTH_SHORT).show();
+
                     }
                 }
                 loadingDialog.cancel();
