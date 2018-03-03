@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(task.isSuccessful()){
                     //start profile activity
                     finish();
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    change(CardFormActivity.class);
                 }
             }
         });
@@ -97,5 +97,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
             startActivity(new Intent(this, MainActivity.class));
         }
+    }
+    private void change(Class myClass) {
+        startActivity(new Intent(this, myClass));
     }
 }

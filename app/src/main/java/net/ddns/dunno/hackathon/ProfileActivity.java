@@ -122,41 +122,27 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         if(view == buttonLogout){
             firebaseAuth.signOut();
-            finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
 
         if(view == insertCard) {
-            mInsertCard.setValue("12345678");
-            insertCard.setVisibility(View.INVISIBLE);
+            //mInsertCard.setValue("12345678");
+            //insertCard.setVisibility(View.INVISIBLE);
+            startActivity(new Intent(this, CardFormActivity.class));
         }
 
         if(view == goToPay) {
-            finish();
             startActivity(new Intent(this, Pay.class));
         }
 
         if(view == goToTransactions) {
-            finish();
             startActivity(new Intent(this, TransactionsActivity.class));
-
-            /*
-            DatabaseReference transactions = FirebaseDatabase.getInstance().getReference().child("Pumps").child("1000");
-            net.ddns.dunno.hackathon.Transaction test = new net.ddns.dunno.hackathon.Transaction();
-            test.setPrice("10");
-            test.setTransactionID("1000");
-            test.setLitres("2");
-            test.setPricePerLitre("2.5");
-            test.setPumpID("1");
-            test.setStatus("Pending");
-            transactions.setValue(test);
-
-            DatabaseReference incercare = FirebaseDatabase.getInstance().getReference().child("Pumps");
-
-            Toast.makeText(Pay.this, "Plata deja efectuata!", Toast.LENGTH_SHORT).show();
-            */
 
         }
 
     }
+    private void change(Class ceva){
+        startActivity(new Intent(this, ceva));
+    }
+
 }
