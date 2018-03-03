@@ -7,6 +7,9 @@ package net.ddns.dunno.hackathon;
 public class Transaction {
     private String UID;
     private String price;
+    private String date;
+    private String time;
+    private String status;
 
     public Transaction() {
     }
