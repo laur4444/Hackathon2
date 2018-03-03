@@ -42,21 +42,23 @@ public class CustomAdaptor extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if(convertView == null) {
-            convertView = LayoutInflater.from(c).inflate(R.layout.item_transaction, parent, false);
+            convertView = LayoutInflater.from(c).inflate(R.layout.item_transaction_final, parent, false);
         }
 
-        TextView textViewID = convertView.findViewById(R.id.textViewID);
-        TextView textViewPrice = convertView.findViewById(R.id.textViewPrice);
+        TextView textViewPrice = convertView.findViewById(R.id.textViewPrice12);
+        TextView textViewStatus = convertView.findViewById(R.id.textViewStatus12);
+        TextView textViewDate = convertView.findViewById(R.id.textViewDate12);
 
         final Transaction s = (Transaction) this.getItem(position);
 
-        textViewID.setText(s.getUID().substring(0, 5) + "         ");
-        textViewPrice.setText(s.getPrice() + " lei");
+        textViewDate.setText(s.getDate());
+        textViewPrice.setText(s.getPrice());
+        textViewStatus.setText(s.getStatus1());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(c, s.getUID(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(c, s.getStatus1(), Toast.LENGTH_SHORT).show();
             }
         });
 

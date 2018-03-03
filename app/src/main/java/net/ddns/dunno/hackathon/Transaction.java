@@ -5,8 +5,10 @@ package net.ddns.dunno.hackathon;
  */
 
 public class Transaction {
-    private String UID;
-    private String price;
+    private String UID = "Error";
+    private String price = "Error";
+    private String date = "Error";
+    private String status1 = "Error";
 
     public Transaction() {
     }
@@ -19,4 +21,11 @@ public class Transaction {
         this.price = price;
     }
     public void setUID(String UID){ this.UID = UID;}
+    public String getDate(){
+        return date;
+    }
+    public String getStatus1(){
+        return status1;
+    }
+
 }
