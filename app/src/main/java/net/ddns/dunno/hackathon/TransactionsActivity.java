@@ -36,7 +36,7 @@ public class TransactionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transactions);
+        setContentView(R.layout.activity_transactions_final);
         user = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference().child("UIDS").child(user.getUid().toString()).child("Tranzactii");
         //db = FirebaseDatabase.getInstance().getReference().child("Pumps");

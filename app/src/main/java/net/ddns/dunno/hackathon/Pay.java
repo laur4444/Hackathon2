@@ -201,7 +201,9 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         //startActivity(new Intent(this, Pay.class));
         if (view == buttonPay) {
-
+                Transaction newTransaction = new Transaction();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii").child("Test");
+                ref.setValue(newTransaction);
         }
     }
     public void change(){
