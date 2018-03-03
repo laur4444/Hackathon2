@@ -65,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         goToTransactions = findViewById(R.id.user_ViewTransactions);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        viewUserEmail.setText("Welcome " + user.getEmail().toString());
+        viewUserEmail.setText("Salut, " + user.getEmail().toString() + "!");
         viewCard.setText("Card: ");
 
         //mConditionRef = mRootRef.child("UIDS").child(user.getUid().toString()).child("Referral");
