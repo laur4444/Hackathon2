@@ -137,6 +137,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         public void run() {
 
                             code = qrcodes.valueAt(0).displayValue;
+                            //if (isValidCode(code))
                             textResult.setText(code);
                             if(code.equals("Pump1") && handShake){
                                 handShake = false;
@@ -151,8 +152,29 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
 
     }
+
+    private boolean isValidCode(String code){
+        String IDS, IDP;
+        IDS = code.substring(0, 3);
+        IDP = code.substring(5, 6);
+        root = FirebaseDatabase.getInstance().getReference().child("Pumps").child(IDS).child(IDP);
+        root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return true;
+    }
+
     private void tryToPay() {
-        root = FirebaseDatabase.getInstance().getReference().child(code).child("ComandaCurenta");
         loadingDialog.setMessage("Working on it...");
         loadingDialog.show();
         root.addValueEventListener(new ValueEventListener() {

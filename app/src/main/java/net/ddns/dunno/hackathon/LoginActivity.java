@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(firebaseAuth.getCurrentUser() != null) {
             //start profile activity
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), CardCheckActivity.class));
         }
 
         loadingDialog = new ProgressDialog(this);
@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(view == registerTextView) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
     private void change(Class myClass) {

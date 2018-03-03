@@ -76,6 +76,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         insertCard.setOnClickListener(this);
         goToPay.setOnClickListener(this);
         goToTransactions.setOnClickListener(this);
+        goToPay.setVisibility(View.GONE);
+        goToTransactions.setVisibility(View.GONE);
 
 
     }
@@ -122,11 +124,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         myCardRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String card_nr = dataSnapshot.getValue(String.class);
-                String afisare;
-                afisare = "xxxx xxxx xxxx " + card_nr.substring(12);
-                viewCard.setText("Card: " + afisare);
-                //myCardRef.removeEventListener(this);
+                if (dataSnapshot.exists()) {
+                    String card_nr = dataSnapshot.getValue(String.class);
+                    String afisare;
+                    afisare = "xxxx xxxx xxxx " + card_nr.substring(12);
+                    viewCard.setText("Card: " + afisare);
+                    goToPay.setVisibility(View.VISIBLE);
+                    goToTransactions.setVisibility(View.VISIBLE);
+                    //myCardRef.removeEventListener(this);
+                }
             }
 
             @Override
