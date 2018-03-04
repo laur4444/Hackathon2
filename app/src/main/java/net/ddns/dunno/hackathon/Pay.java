@@ -39,7 +39,7 @@ import java.io.IOException;
 public class Pay extends AppCompatActivity implements View.OnClickListener {
 
     private EditText codeText;
-    private Button buttonPay;
+    //private Button buttonPay;
 
     private DatabaseReference root;
     private DatabaseReference user;
@@ -84,9 +84,9 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_pay);
         loadingDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
-        buttonPay = findViewById(R.id.buttonPay);
+        //buttonPay = findViewById(R.id.buttonPay);
 
-        buttonPay.setOnClickListener(this);
+        //buttonPay.setOnClickListener(this);
 
         cameraPreview = findViewById(R.id.cameraPreview);
 
@@ -144,7 +144,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                                 handShake = false;
                                 firstChange = true;
                                 tryToPay();
-                                code = "Pula";
+                                code = "";
                             }
                         }
                     });
@@ -200,6 +200,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         user = user.getParent().child("ComandaCurenta");
                         user.setValue("Waiting");
                         Toast.makeText(Pay.this, "Poti alimenta!", Toast.LENGTH_SHORT).show();
+                        root.removeEventListener(this);
                     } else {
                         handShake = true;
                         Toast.makeText(Pay.this, "Plata Efectuata!", Toast.LENGTH_SHORT).show();
@@ -228,11 +229,13 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
+/*
         if (view == buttonPay) {
                 Transaction newTransaction = new Transaction();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("UIDS").child(firebaseAuth.getUid()).child("Tranzactii").child("Test");
                 ref.setValue(newTransaction);
         }
+*/
     }
+
 }
