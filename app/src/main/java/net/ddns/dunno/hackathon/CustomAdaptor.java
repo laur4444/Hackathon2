@@ -52,7 +52,7 @@ public class CustomAdaptor extends BaseAdapter{
         final Transaction s = (Transaction) this.getItem(position);
 
         textViewDate.setText(s.getDate());
-        textViewPrice.setText(s.getPrice());
+        textViewPrice.setText(s.getPrice() + " lei");
         textViewStatus.setText(s.getStatus1());
 
         convertView.setOnClickListener(new View.OnClickListener() {
