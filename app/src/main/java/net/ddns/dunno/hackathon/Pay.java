@@ -195,7 +195,7 @@ public class Pay extends AppCompatActivity implements View.OnClickListener {
                         firstChange = false;
                         Transaction noua = new Transaction();
                         noua.setUID(firebaseAuth.getUid());
-                        user = user.getParent().child("Transactions");
+                        user = user.getParent().child("Transaction");
                         user.setValue(noua);
                         user = user.getParent().child("ComandaCurenta");
                         user.setValue("Waiting");
